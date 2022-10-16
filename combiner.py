@@ -1,6 +1,8 @@
 import pandas as pd
 import sys
 import os
+import shlex
+
 class Combiner:
 
     def console_first_file_csv(self):
@@ -18,7 +20,7 @@ class Combiner:
             if len(console_list) <= 1:
                 print("Please enter equal or more than two csv files")
                 return None 
-            print(console_list)
+            # print(console_list)
             return console_list
 
 
@@ -39,9 +41,10 @@ class Combiner:
     def convert_df_to_csv(self, df): 
         final_csv_string = df.to_string(header=True,
                   index=False,
+                  sep = '\t',
                   index_names=False).split('\n')
 
-        final_list_string = [','.join(ele.split()) for ele in final_csv_string]
+        final_list_string = final_list_string = ['\"{}\"'.format('\",\"'.join(ele.split('\t'))) for ele in final_csv_string]
 
         for line in final_list_string:
             sys.stdout.write(line.strip() + '\n')
@@ -50,7 +53,7 @@ class Combiner:
 
     def main(self):
         file = self.console_first_file_csv()
-        print(file)
+        # print(file)
 
         if file is None: 
             return ["Please enter equal or more than two csv files", "File does not exist"]
@@ -59,15 +62,15 @@ class Combiner:
         return self.convert_df_to_csv(df)
     
 
-# def main():
-#             combine_obj = Combiner()
-#             file = combine_obj.console_first_file_csv()
+def main():
+            combine_obj = Combiner()
+            file = combine_obj.console_first_file_csv()
 
-#             if file is None: 
-#                 return None 
+            if file is None: 
+                return None 
 
-#             df = combine_obj.combine_all_df([], file)
-#             return combine_obj.convert_df_to_csv(df)
+            df = combine_obj.combine_all_df([], file)
+            return combine_obj.convert_df_to_csv(df)
             
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
