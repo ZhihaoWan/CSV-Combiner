@@ -55,17 +55,9 @@ class Combiner:
         3. sys.stdout write them into a csv file
         4. return the final_list_string for testing usage
         """
-    
-        final_csv_string = df.to_string(header=True,
-                  index=False,
-                  index_names=False).split('\n')
-
-        final_list_string = ['\"{}\"'.format('\",\"'.join(shlex.split(shlex.quote(ele)))) for ele in final_csv_string]
-
-        for line in final_list_string:
-            sys.stdout.write(line.strip() + '\n')
-        return final_list_string
-
+        final_csv_string = df.to_csv(index=False)
+        sys.stdout.write(final_csv_string)
+        return final_csv_string
 
     def main(self):
         """
